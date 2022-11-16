@@ -8,6 +8,8 @@ namespace MVC__Basic_with_inter_view_navigation_.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        public object Session { get; private set; }
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -15,7 +17,6 @@ namespace MVC__Basic_with_inter_view_navigation_.Controllers
 
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -26,18 +27,35 @@ namespace MVC__Basic_with_inter_view_navigation_.Controllers
 
         public IActionResult Users()
         {
-            return View(ListUsers());
+            return View();
         }
 
-        public static List<string> ListUsers()
+        public ActionResult ListaUsuarios()
         {
-            List<string> ListUsers = new List<string>();
-            ListUsers.Add("Fernando");
-            ListUsers.Add("Alejandra");
-            ListUsers.Add("Raul");
-            ListUsers.Add("Martin");
-            ListUsers.Add("Ernesto");
-            return ListUsers;
+            List<string> listaUsuarios = new List<string>();
+            listaUsuarios.Add("Fernando");
+            listaUsuarios.Add("Alejandra");
+            listaUsuarios.Add("Raul");
+            listaUsuarios.Add("Martin");
+            listaUsuarios.Add("Ernesto");
+
+            //ViewBag.ListaUsuarios = listaUsuarios;
+            //TempData["ListaUsuarios"] = listaUsuarios;
+            Session["ListaUsuarios"] = listaUsuarios;
+            //ViewData["ListaUsuarios"] = listaUsuarios;
+
+            return View(listaUsuarios);
+        }
+
+        [HttpPost]
+        public ActionResult ListaUsuarios(string selUsuarios)
+        {
+            ViewBag.Nombre = selUsuarios;
+            //List<string> listaUsuarios = ViewBag.ListaUsuarios;
+            //List<string> listaUsuarios = (List<string>)TempData["ListaUsuarios"];
+            List<string> listaUsuarios = (List<string>)Session["ListaUsuarios"];
+            //List<string> listaUsuarios = (List<string>)ViewData["ListaUsuarios"];
+            return View(listaUsuarios);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
